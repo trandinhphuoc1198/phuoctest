@@ -1,17 +1,18 @@
 from base64 import decode
 from django.shortcuts import render,redirect
 from .models import Room,Topic,Message
-from .forms import Roomform
+from .forms import Roomform,Messageform
 from django.db.models import Q
 from django.contrib.auth import login,logout,authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm
-
+import time
 def home(request):
     return render(request,'main/home.html')
 def room(request,pk=None):
+    
     q=request.GET.get('w')
     if q:
         rooms=Room.objects.filter(Q(topic__title=q) | 
@@ -28,13 +29,11 @@ def room(request,pk=None):
         messages=rooms.message_set.all().order_by('-created')
         context={'rooms':rooms,'messages':messages}
         if request.method=="POST":
-            message=Message.objects.create(
+            message=Message.objects.create( 
                 user=request.user,
                 room=rooms,
                 content=request.POST.get('content')
                 )
-            
-            
         return render(request,'main/specific_room.html',context)
 @login_required(login_url='log_in')
 def create_room(request):
