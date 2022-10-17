@@ -8,11 +8,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm
-import time
+import time,threading,os
 def home(request):
     return render(request,'main/home.html')
 def room(request,pk=None):
-    
     q=request.GET.get('w')
     if q:
         rooms=Room.objects.filter(Q(topic__title=q) | 
@@ -39,7 +38,6 @@ def room(request,pk=None):
 def create_room(request):
     form=Roomform()
     context={'form':form}
-    print(request.method)
     if request.method=='POST':
         form=Roomform(request.POST)
         if form.is_valid():

@@ -4,7 +4,7 @@ connections=[]
 ip=socket.gethostbyname(socket.gethostname())
 port=9999
 ser=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-ser.bind((ip,port))
+ser.bind(('localhost',port))
 def connect():
     while True:
         ser.listen(10)

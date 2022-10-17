@@ -1,12 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-</head>
-<body>
-    <h1>Blog Home</h1>
-</body>
-</html>
+{% extends "blog/base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-center">
+{% if user.is_authenticated %}
+<a href="{% url 'create-post' %}"><div role="button" class="container btn btn-primary my-1" style="width: 30rem;">Create Post</div></a>
+{% endif %}
+</div>
+    {% for data in object %}
+    <div class="container rounded-4 border bg-secondary my-2" style="width: 30rem;">
+        <div class="row">
+            <div class="col-8">
+        
+                <div><a href="/blog/{{data.id}}" class="fs-3 text-break text-decoration-none">{{data.title|truncatechars:30}}</a></div>
+                <a href="/blog/{{data.id}}" class="fs-5 text-break text-dark text-decoration-none">{{data.content|truncatechars:100}}</a></p>
+            </div>
+            <div class="col-1">
+                <div class="row mt-4">by</div>
+            </div>
+            <div class="col-auto">
+                <div class="row ">
+                    <img src="{{data.owner.profile.image.url}}" style="width: 90px;height: 50px;" class="rounded-circle">
+                </div>
+                <div class="row">
+                    <a href="#" class="fst-italic text-decoration-none ten-chars badge">{{data.owner.profile.nick_name}}</a>
+                </div>    
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <div class="container d-flex justify-content-center" style="max-width: 500px;">
+        {% if object.has_previous == True %}
+            <a href="?page={{object.previous_page_number}}" class="btn btn-primary"><<</a>
+            <a href="?page=1" class="btn btn-primary">First</a>
+        {% endif %}
+        {% for page_number in objects.page_range %}
+            {% if page_number == object.number %}
+                <a href="?page={{page_number}}" class="btn btn-primary disabled" disabled>{{page_number}}</a>
+            {% elif page_number > object.number|add:'-3' and page_number < object.number|add:'3' %}
+                <a href="?page={{page_number}}" class="btn btn-primary">{{page_number}}</a>
+            {% endif %}
+        {% endfor %}
+        {% if object.has_next == True %}
+            <a href="?page={{objects.num_pages}}" class="btn btn-primary">Last</a>
+            <a href="?page={{object.next_page_number}}" class="btn btn-primary">>></a>
+        {% endif %}
+    </div>
+{% endblock %}

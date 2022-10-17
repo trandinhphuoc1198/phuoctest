@@ -1,5 +1,4 @@
 from abc import abstractclassmethod,ABCMeta
-from unicodedata import name
 class MailCreator(metaclass=ABCMeta):
 
     def __init__(self,name,text) -> None:

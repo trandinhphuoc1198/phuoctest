@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'blog/css/bootstrap.css' %}" >
+    <title>Home</title>
+    <style>
+        .ten-chars {
+        width: 10ch;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+        .twenty-chars {
+        width: 13ch;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+        .thirty-chars {
+        width: 30ch;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+        .fifty-chars {
+        width: 50ch;
+        overflow: hidden;
+        white-space: normal;
+        text-overflow: ellipsis;
+    }   
+    </style>
+</head>
+<body>
+    
+    <nav class="navbar sticky-top navbar-expand-sm navbar-dark bg-dark">
+        <div class="container">
+            <a href="{% url 'blog-home' %}" class="navbar-brand h1">
+                <img src="{% static 'img.png'%}" width="50" height="30" alt="image" class="d-inline-block align-text-center rounded">
+                intaku
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navitems" aria-controls="navitems" aria-expanded="false" aria-label="Toggle navigation">Menu</button>
+            <div class="collapse navbar-collapse " id="navitems">
+                <div class="navbar-nav col-9 dropdown">
+                    
+                    <a href="{% url 'blog-home' %}" class="nav-link active fs-3" data-bs-toggle="dropdown" id="blogdropdown" aria-expanded="false" role="button">Blog</a>
+                    <div class="dropdown-menu" aria-labelledby="blogdropdown">
+                        <a href="{% url 'profile' %}" class="dropdown-item">My Posts</a>
+                        <a href="{% url 'create-post' %}" class="dropdown-item">Create Post</a>
+                    </div>
+                </div>
+                          
+                {% if user.is_authenticated %}
+                <div class="navbar-nav bg-secondary rounded-3" style="width: 170px; height:60px">
+                    <div class="nav-item dropdown" >
+                        <a href="#" class="nav-link active twenty-chars fs-4" data-bs-toggle="dropdown" id="userdropdown" aria-expanded="false" role="button" >
+                            <img src='{{user.profile.image.url}}' class="rounded-4" width="70px" height="50px" /> {{user.profile.nick_name}}</a>
+                        <div class="dropdown-menu" aria-labelledby="userdropdown">
+                            <a href="{% url 'profile' %}" class="dropdown-item">Profile</a>
+                            <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="navbar-nav bg-secondary rounded-3" >
+                    <div class="nav-item">
+                        <a href="{% url 'register' %}" class="nav-link active">Register</a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="{% url 'login' %}" class="nav-link active">Login</a>
+                    </div>
+                {% endif %}
+                </div>
+                
+            </div>
+        </div>
+    </nav>
+    
+    
+    {% if messages %}
+        
+        {% for message in messages %}
+        <div class="container-md mt-2 alert alert-{{message.tags}}">{{ message }}</div>
+        {% endfor %}
+        
+    {% endif %}
+    
+    <div class="container mt-4">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <script src="{% static 'blog/js/bootstrap.bundle.js' %}"></script>
+</body>
+</html>

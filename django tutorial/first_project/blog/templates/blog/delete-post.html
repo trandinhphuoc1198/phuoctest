@@ -1,0 +1,43 @@
+{% extends "blog/base.html" %}
+{% block content %}
+<div class="container-sm d-flex justify-content-center" style="width: 30rem;;">
+    <form method="post">
+        {% csrf_token %}
+        <div class="alert alert-danger" role="alert" style="width: 30rem;">
+            <p class="text-center">Are you sure deleting this post?</p>
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="m-1 btn btn-danger">Yes</button>
+                <a href="/blog/{{post.id}}" class="m-1 btn btn-primary">No</a>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="container-sm d-flex justify-content-center" style="width: 30rem;">
+    <div class="card">
+        <div class="card-header container">
+            <div class="row">
+                <div class="col-9">
+                    <h4>{{post.title}}</h4>
+                </div>
+                {% if post.owner == request.user %}
+                <div class="col d-flex justify-content-end">
+                    <a href="/blog/{{post.id}}/edit" class="btn btn-primary mx-1">
+                        Edit
+                    </a>
+                    <a href="/blog/{{post.id}}/delete" class="btn btn-danger">
+                        Delete
+                    </a>
+                </div>                {% endif %}
+            </div>
+        </div>
+        <div class="card-body">
+            <blockquote class="blockquote mb-0">
+                <p>{{post.content}}</p>
+                <footer class="blockquote-footer">by <a href="#" class="text-muted fs-">{{post.owner}}</a></footer>
+            </blockquote>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
